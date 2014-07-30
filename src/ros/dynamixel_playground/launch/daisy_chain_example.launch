@@ -1,0 +1,29 @@
+<launch>
+    <!-- Start dynamixel controller -->
+    <node name="dynamixel_manager" pkg="dynamixel_controllers" type="controller_manager.py"
+          required="true" output="screen">
+        <rosparam>
+            namespace: dxl_manager
+            serial_ports:
+                daisy_chain_port:
+                    port_name: "/dev/ttyUSB0"
+                    baud_rate: 1000000
+                    min_motor_id: 1
+                    max_motor_id: 7
+                    update_rate: 5
+        </rosparam>
+    </node>
+
+    <!-- Start joint controller -->
+    <rosparam file="$(find dynamixel_playground)/daisy_chain_config.yaml" command="load"/>
+    <node name="daisy_chain_controller_spawner" pkg="dynamixel_controllers"
+          type="controller_spawner.py"
+          args="--manager=dxl_manager
+                --port daisy_chain_port
+                a1 a2 a3 a4 a5 a6 a7"
+                output="screen"/>
+
+    <!-- Start daisy chain example -->
+    <node name="daisy_chain_example" pkg="dynamixel_playground" type="daisy_chain_example.py"
+      output="screen"/>
+</launch>
