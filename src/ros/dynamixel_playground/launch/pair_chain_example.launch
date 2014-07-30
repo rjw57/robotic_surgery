@@ -1,0 +1,32 @@
+<launch>
+    <!-- Start dynamixel controller -->
+    <node name="dynamixel_manager" pkg="dynamixel_controllers" type="controller_manager.py"
+          required="true" output="screen">
+        <rosparam>
+            namespace: dxl_manager
+            serial_ports:
+                pair_chain_port:
+                    port_name: "/dev/ttyUSB0"
+                    baud_rate: 1000000
+                    min_motor_id: 1
+                    max_motor_id: 7
+                    update_rate: 5
+        </rosparam>
+    </node>
+
+    <!-- Start joint controller -->
+    <rosparam file="$(find dynamixel_playground)/pair_chain_config.yaml" command="load"/>
+    <node name="pair_chain_controller_spawner" pkg="dynamixel_controllers"
+          type="controller_spawner.py"
+          args="--manager=dxl_manager
+                --port pair_chain_port
+                shoulder_controller elbow_controller wrist_tilt_controller
+                wrist_roll_controller claw_controller"
+          output="screen"/>
+
+    <!-- Start pair chain example -->
+    <!--
+    <node name="pair_chain_example" pkg="dynamixel_playground" type="pair_chain_example.py"
+      output="screen"/>
+    -->
+</launch>
