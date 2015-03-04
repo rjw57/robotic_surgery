@@ -16,10 +16,16 @@ find_package(catkin REQUIRED
 )
 
 ## System dependencies are found with CMake's conventions
-# find_package(Boost REQUIRED COMPONENTS system)
+#find_package(Boost REQUIRED COMPONENTS system)
 
 find_package(Jsoncpp REQUIRED)
 include_directories(${JSONCPP_INCLUDE_DIRS})
+
+# Find PCL dependencies
+find_package(PCL REQUIRED COMPONENTS common io)
+include_directories(${PCL_INCLUDE_DIRS})
+link_directories(${PCL_LIBRARY_DIRS})
+add_definitions(${PCL_DEFINITIONS})
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -133,7 +139,7 @@ add_dependencies(startBody k2_client_generate_messages_cpp)
 add_dependencies(startDepth k2_client_generate_messages_cpp)
 add_dependencies(startIR k2_client_generate_messages_cpp)
 add_dependencies(startRGB k2_client_generate_messages_cpp)
-target_link_libraries(startPointCloud ${catkin_LIBRARIES} ${JSONCPP_LIBRARIES})
+add_dependencies(startPointCloud k2_client_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(k2_client_node
@@ -144,7 +150,7 @@ target_link_libraries(startBody ${catkin_LIBRARIES} ${JSONCPP_LIBRARIES})
 target_link_libraries(startDepth ${catkin_LIBRARIES} ${JSONCPP_LIBRARIES})
 target_link_libraries(startIR ${catkin_LIBRARIES} ${JSONCPP_LIBRARIES})
 target_link_libraries(startRGB ${catkin_LIBRARIES} ${JSONCPP_LIBRARIES})
-target_link_libraries(startPointCloud ${catkin_LIBRARIES} ${JSONCPP_LIBRARIES})
+target_link_libraries(startPointCloud ${catkin_LIBRARIES} ${JSONCPP_LIBRARIES} ${PCL_LIBRARIES})
 
 #############
 ## Install ##
