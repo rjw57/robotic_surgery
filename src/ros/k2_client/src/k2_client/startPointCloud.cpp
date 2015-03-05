@@ -30,16 +30,16 @@ int main(int argC,char **argV)
 
 		// TODO(Somhtr): change to ROS' logging API
 		cout << "Copying data..." << endl;
-		uint64_t ptr = 0;
+		uint64_t idx = 0;
 		float x,y,z;
-		while(ptr<pointBufferSize)
+		while(idx<pointBufferSize)
 		{
-			memcpy(&x, &mySocket.mBuffer[ptr  ],4);
-			memcpy(&y, &mySocket.mBuffer[ptr+4],4);
-			memcpy(&z, &mySocket.mBuffer[ptr+8],4);
+			memcpy(&x, &mySocket.mBuffer[idx  ],4);
+			memcpy(&y, &mySocket.mBuffer[idx+4],4);
+			memcpy(&z, &mySocket.mBuffer[idx+8],4);
 
 			pc->push_back(pcl::PointXYZ(x,y,z));
-			ptr += 12;
+			idx += 12;
 		}
 
 		double utcTime;
