@@ -7,9 +7,6 @@ typedef pcl::PointCloud<pcl::PointXYZ> PointCloud;
 
 int pointBufferSize = 2605056;
 int streamSize = pointBufferSize + sizeof(double);
-std::string cameraName = "depth";
-std::string imageTopicSubName = "image_raw";
-std::string cameraInfoSubName = "camera_info";
 
 int main(int argC,char **argV)
 {
@@ -26,10 +23,7 @@ int main(int argC,char **argV)
     
     pc->header.frame_id =  ros::this_node::getNamespace().substr(1,std::string::npos) + "/kinect_pcl"; 
 	while(ros::ok())
-	{
-	    //pc->width = 512*424;
-        //pc->height = 1;
-        
+	{        
 	    cout << "Reading data..." << endl;
 		mySocket.readData();
 		
@@ -41,9 +35,8 @@ int main(int argC,char **argV)
 		    memcpy(&x, &mySocket.mBuffer[ptr  ],4);
 		    memcpy(&y, &mySocket.mBuffer[ptr+4],4);
 		    memcpy(&z, &mySocket.mBuffer[ptr+8],4);
-		    
+
 		    pc->push_back(pcl::PointXYZ(x,y,z));
-		    //cout << "x: " << x << " y: " << y << " z: " << z << endl;
 		    ptr += 12;
 		}
 		
@@ -51,7 +44,6 @@ int main(int argC,char **argV)
 		memcpy(&utcTime,&mySocket.mBuffer[pointBufferSize],sizeof(double));
 		pc->header.stamp = ros::Time(utcTime).toSec();
 
-        cout << "Publishing point cloud w" << pc->width << " h " << pc->height << endl;
 		pub.publish(pc);
 		pc->clear();
 		
