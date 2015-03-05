@@ -20,9 +20,9 @@ int main(int argC,char **argV)
 
 	ros::Publisher pub = n.advertise<PointCloud>("point_cloud",1);
 
-    PointCloud::Ptr pc (new PointCloud);
+	PointCloud::Ptr pc (new PointCloud);
 
-    pc->header.frame_id =  ros::this_node::getNamespace().substr(1,std::string::npos) + "/kinect_pcl";
+	pc->header.frame_id =  ros::this_node::getNamespace().substr(1,std::string::npos) + "/kinect_pcl";
 	while(ros::ok())
 	{
 		// TODO(Somhtr): change to ROS' logging API
