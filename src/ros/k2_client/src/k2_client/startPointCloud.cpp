@@ -39,7 +39,7 @@ int main(int argC,char **argV)
 			memcpy(&z, &mySocket.mBuffer[idx+8],4);
 
 			pc->push_back(pcl::PointXYZ(x,y,z));
-			idx += 12;
+			idx += 12; // 12 == 3 * sizeof(float)
 		}
 
 		double utcTime;
