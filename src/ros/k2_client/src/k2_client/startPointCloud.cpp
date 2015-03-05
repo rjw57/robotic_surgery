@@ -6,6 +6,7 @@ using namespace std;
 typedef pcl::PointCloud<pcl::PointXYZ> PointCloud;
 
 int pointBufferSize = 2605056;
+int numberOfPoints = pointBufferSize / sizeof(float); // Hacky, much?
 int streamSize = pointBufferSize + sizeof(double);
 
 int main(int argC,char **argV)
@@ -30,16 +31,12 @@ int main(int argC,char **argV)
 
 		// TODO(Somhtr): change to ROS' logging API
 		cout << "Copying data..." << endl;
-		uint64_t idx = 0;
-		float x,y,z;
-		while(idx<pointBufferSize)
+		float* pt_coords = reinterpret_cast<float*>(mySocket.mBuffer);
+		for(uint64_t idx=0; idx<numberOfPoints; idx+=3)
 		{
-			memcpy(&x, &mySocket.mBuffer[idx  ],4);
-			memcpy(&y, &mySocket.mBuffer[idx+4],4);
-			memcpy(&z, &mySocket.mBuffer[idx+8],4);
-
-			pc->push_back(pcl::PointXYZ(x,y,z));
-			idx += 12; // 12 == 3 * sizeof(float)
+			pc->push_back(pcl::PointXYZ(
+				pt_coords[idx], pt_coords[idx+1], pt_coords[idx+2]
+			);
 		}
 
 		double utcTime;
