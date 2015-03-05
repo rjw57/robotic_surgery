@@ -24,9 +24,11 @@ int main(int argC,char **argV)
     pc->header.frame_id =  ros::this_node::getNamespace().substr(1,std::string::npos) + "/kinect_pcl";
 	while(ros::ok())
 	{
-	    cout << "Reading data..." << endl;
+		// TODO(Somhtr): change to ROS' logging API
+		cout << "Reading data..." << endl;
 		mySocket.readData();
 
+		// TODO(Somhtr): change to ROS' logging API
 		cout << "Copying data..." << endl;
 		uint64_t ptr = 0;
 		float x,y,z;
