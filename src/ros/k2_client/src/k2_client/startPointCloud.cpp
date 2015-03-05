@@ -36,7 +36,7 @@ int main(int argC,char **argV)
 		{
 			pc->push_back(pcl::PointXYZ(
 				pt_coords[idx], pt_coords[idx+1], pt_coords[idx+2]
-			);
+			));
 		}
 
 		double utcTime;
